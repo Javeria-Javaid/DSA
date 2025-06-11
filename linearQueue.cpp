@@ -1,120 +1,99 @@
-#include <iostream>
-using namespace std;
+#include<iostream>  // Include the Input/Output Stream Library for console operations
+using namespace std;  // Use the standard namespace to avoid typing std::
 
-class LinearQueue {
+const int capacity = 5;  // Define the fixed capacity/size of the queue
+
+class linearQueue {
 private:
-    int* queue;     // Dynamic array to store elements
-    int front;      // Front index
-    int rear;       // Rear index
-    int capacity;   // Maximum capacity of the queue
+    int queue[capacity];  // Array to store queue elements (fixed size)
+    int front;           // Index pointer for the front of the queue
+    int rear;            // Index pointer for the rear of the queue
 
 public:
-    // Constructor to initialize the queue
-    LinearQueue(int size) {
-        capacity = size;
-        queue = new int[capacity];
-        front = rear = -1;  // Empty queue
+    // Constructor - initializes the queue
+    linearQueue() {
+        front = -1;  // Initialize front to -1 (indicates empty queue)
+        rear = -1;   // Initialize rear to -1 (indicates empty queue)
     }
 
-    // Destructor to free memory
-    ~LinearQueue() {
-        delete[] queue;
-    }
-
-    // Check if the queue is empty
+    // Check if queue is empty
     bool isEmpty() {
-        return (front == -1);
+        // Queue is empty if both front and rear are -1
+        return (front == -1 && rear == -1);
     }
 
-    // Check if the queue is full
+    // Check if queue is full
     bool isFull() {
-        return (rear == capacity - 1);
+        // Queue is full if rear is at last index (capacity-1)
+        return (rear == capacity-1);
     }
 
-    // Add an element to the rear of the queue (Enqueue)
-    void enqueue(int item) {
-        if (isFull()) {
-            cout << "Queue is Full! Cannot enqueue." << endl;
-            return;
+    // Add an element to the queue (enqueue operation)
+    void enqueue(int value) {
+        if(isFull()) {  // Check if queue is full first
+            cout << "Queue is Full! Cannot enqueue " << value << endl;
+            return;  // Exit if full
         }
-        if (isEmpty()) {
-            front = 0;  // First element
+        if(isEmpty()) {  // If queue was empty
+            front = 0;   // Set front to 0 (first position)
         }
-        rear++;
-        queue[rear] = item;
-        cout << "Enqueued: " << item << endl;
+        rear++;  // Move rear pointer forward
+        queue[rear] = value;  // Store the value at rear position
+        cout << "Enqueued " << value << " in Queue" << endl;  // Print confirmation
     }
 
-    // Remove an element from the front of the queue (Dequeue)
-    int dequeue() {
-        if (isEmpty()) {
-            cout << "Queue is Empty! Cannot dequeue." << endl;
-            return -1;  // Error code
+    // Remove an element from the queue (dequeue operation)
+    void dequeue() {
+        if(isEmpty()) {  // Check if queue is empty first
+            cout << "Queue is empty. Cannot Dequeue" << endl;
+            return;  // Exit if empty
         }
-        int item = queue[front];
-        if (front == rear) {  // Last element
-            front = rear = -1;
-        } else {
-            front++;
+        int value = queue[front];  // Get the front element
+        if(front == rear) {  // If this was the last element
+            front = rear = -1;  // Reset queue to empty state
         }
-        cout << "Dequeued: " << item << endl;
-        return item;
-    }
-
-    // Print the front element without removing it
-    void printFront() {
-        if (isEmpty()) {
-            cout << "Queue is Empty! No front element." << endl;
-        } else {
-            cout << "Front element: " << queue[front] << endl;
+        else {
+            front++;  // Otherwise just move front pointer forward
         }
-    }
-
-    // Check if an element exists in the queue
-    bool isInList(int element) {
-        if (isEmpty()) {
-            return false;
-        }
-        for (int i = front; i <= rear; i++) {
-            if (queue[i] == element) {
-                return true;
-            }
-        }
-        return false;
+        cout << "Dequeued " << value << " From the queue" << endl;  // Print confirmation
     }
 
     // Display all elements in the queue
     void display() {
-        if (isEmpty()) {
-            cout << "Queue is Empty!" << endl;
-            return;
+        if(isEmpty()) {  // Check if queue is empty
+            cout << "Queue is empty" << endl;
+            return;  // Exit if empty
         }
         cout << "Queue elements: ";
-        for (int i = front; i <= rear; i++) {
-            cout << queue[i] << " ";
+        // Loop through elements from front to rear
+        for(int i = front; i <= rear; i++) {
+            cout << queue[i] << " ";  // Print each element
         }
-        cout << endl;
+        cout << endl;  // New line after display
     }
 };
 
 int main() {
-    int size;
-    cout << "Enter the size of the queue: ";
-    cin >> size;
+    linearQueue q;  // Create a queue object
 
-    LinearQueue q(size);
+    // Test enqueue operations
+    q.enqueue(1);  // Add 1 to queue
+    q.enqueue(2);  // Add 2 to queue
+    q.enqueue(3);  // Add 3 to queue
+    q.enqueue(4);  // Add 4 to queue
+    q.enqueue(5);  // Add 5 to queue (queue now full)
+    q.enqueue(6);  // Try to add 6 (will show queue is full)
 
-    q.enqueue(10);
-    q.enqueue(20);
-    q.enqueue(30);
+    q.display();  // Display current queue (should show 1 2 3 4 5)
 
-    q.display();        // Output: 10 20 30
-    q.printFront();     // Output: Front element: 10
-    q.dequeue();        // Output: Dequeued: 10
-    q.display();        // Output: 20 30
+    // Test dequeue operations
+    q.dequeue();  // Remove 1 (front element)
+    q.dequeue();  // Remove 2 (new front element)
 
-    cout << "Is 20 in the queue? " << (q.isInList(20) ? "Yes" : "No") << endl;  // Yes
-    cout << "Is 50 in the queue? " << (q.isInList(50) ? "Yes" : "No") << endl;  // No
+    q.display();  // Display current queue (should show 3 4 5)
 
-    return 0;
+    q.enqueue(6);  // Add 6 to available space
+    q.display();   // Display queue (should show 3 4 5 6)
+
+    return 0;  // End program
 }
