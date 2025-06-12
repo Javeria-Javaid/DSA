@@ -14,6 +14,13 @@ struct Node {
     }
 };
 
+Node* newNode(int data) {
+    Node* node = new Node;
+    node->data = data;
+    node->left = node->right = nullptr;
+    return node;
+}
+
 // Insert a new node in BST
 Node* insert(Node* root, int value) {
     if (root == nullptr) {
