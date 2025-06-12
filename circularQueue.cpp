@@ -66,6 +66,26 @@ public:
         return arr[front];
     }
 
+    // Check if a value exists in the queue
+    bool isInList(int value) {
+        if (isEmpty()) {
+            return false;  // Empty queue contains nothing
+        }
+
+        int i = front;
+        while (true) {
+            if (arr[i] == value) {
+                return true;  // Found match
+            }
+            if (i == rear) {
+                break;  // Reached the end of the queue
+            }
+            i = (i + 1) % MAX_SIZE;  // Move to next index (wrap around if needed)
+        }
+
+        return false;  // No match found
+    }
+
     // Display all elements in the queue
     void display() {
         if (isEmpty()) {
@@ -96,6 +116,10 @@ int main() {
 
     q.enqueue(60); // Should show queue is full
 
+    // Check if elements exist in the queue
+    cout << "Is 20 in the queue? " << (q.isInList(20) ? "Yes" : "No") << endl;
+    cout << "Is 60 in the queue? " << (q.isInList(60) ? "Yes" : "No") << endl;
+
     q.dequeue();
     q.dequeue();
 
@@ -108,12 +132,19 @@ int main() {
 
     cout << "Front element is: " << q.peek() << endl;
 
+    // Check if elements exist after modifications
+    cout << "Is 10 in the queue? " << (q.isInList(10) ? "Yes" : "No") << endl;
+    cout << "Is 70 in the queue? " << (q.isInList(70) ? "Yes" : "No") << endl;
+
     q.dequeue();
     q.dequeue();
     q.dequeue();
     q.dequeue();
 
     q.dequeue(); // Should show queue is empty
+
+    // Final check on empty queue
+    cout << "Is 30 in the queue? " << (q.isInList(30) ? "Yes" : "No") << endl;
 
     return 0;
 }
